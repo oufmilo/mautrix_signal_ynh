@@ -23,6 +23,9 @@ architectures = "all"
 multi_instance = true
 ldap = "not_relevant"
 sso = "not_relevant"
+disk = "100M"
+ram.build = "256M"
+ram.runtime = "1024M"
 
 [install]
     [install.synapsenumber]
