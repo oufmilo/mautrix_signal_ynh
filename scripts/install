@@ -50,11 +50,9 @@ ynh_script_progression --message="Setting up source files..." --weight=3
 # Download, check integrity, uncompress and patch the source from app.src
 ynh_setup_source --dest_dir="$install_dir"
 
-chmod -R o-rwx "$install_dir"
-chown -R "$app:$app" "$install_dir"
-
-mkdir -p /var/log/$app
-chown -R "$app:$app" /var/log/$app
+chmod 750 "$install_dir"
+chmod -R 750 "$install_dir"
+chown -R $app:$app "$install_dir"
 
 #=================================================
 # ADD A CONFIGURATION
@@ -71,8 +69,9 @@ chown "$app:$app" "$install_dir/config.yaml"
 #=================================================
 ynh_script_progression --message="Registering Synapse app-service" --weight=1
 
-"$install_dir/venv/bin/python3" -m mautrix_signal -g -c "$install_dir/config.yaml" -r "/etc/matrix-$synapse_instance/app-service/$app.yaml"
-"/opt/yunohost/matrix-$synapse_instance/update_synapse_for_appservice.sh" || ynh_die --message="Synapse can't restart with the appservice configuration"
+$install_dir/mautrix-signal -g -c $install_dir/config.yaml -r /etc/matrix-$synapse_instance/app-service/$app.yaml
+/opt/yunohost/matrix-$synapse_instance/update_synapse_for_appservice.sh || ynh_die --message="Synapse can't restart with the appservice configuration"
+
 
 chown -R "$app:$app" "$install_dir"
 ynh_store_file_checksum --file="/etc/matrix-$synapse_instance/app-service/$app.yaml"
@@ -88,7 +87,10 @@ ynh_add_systemd_config
 yunohost service add "$app" --description="$app daemon for bridging Signal and Matrix messages" --log=/var/log/$app/$app.log
 
 # Use logrotate to manage application logfile(s)
-ynh_use_logrotate
+ynh_use_logrotate --logfile "/var/log/$app/$app.log" --nonappend --specific_user $app/$app
+chmod -R 600 "/var/log/$app"
+chmod 700 "/var/log/$app"
+chown -R $app:$app /var/log/$app
 
 #=================================================
 # START SYSTEMD SERVICE
