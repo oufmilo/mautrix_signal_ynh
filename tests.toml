@@ -12,4 +12,4 @@ test_format = 1.0
     args.botadmin = "@johndoe:synapsedomain.tld"
     args.botusers = "synapsedomain.tld"
 
-    test_upgrade_from.40c16d3c8898196c6e1a43e8f0af70c052dd41f6.name = "0.2.3~ynh1"
+    test_upgrade_from.e45a5c8d2d9f4a1e6a879aa518f8464822793be6.name = "0.4.3~ynh1"
