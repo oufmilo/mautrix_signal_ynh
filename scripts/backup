@@ -33,8 +33,6 @@ ynh_backup --src_path="/etc/logrotate.d/$app"
 # BACKUP VARIOUS FILES
 #=================================================
 
-ynh_backup --src_path="$signald_data"
-
 ynh_backup --src_path="/var/log/$app/"
 
 #=================================================
